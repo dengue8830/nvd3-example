@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="MainCtrl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sunburst chart nvd3 - reaciones</title>
+    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
+    <style>
+        .nvd3 text {
+            /*font: normal 12px FontAwesome, sans-serif;*/
+            font: lighter 13px Arial, sans-serif;
+            fill: #F8F8F8;
+        }
+    </style>
+</head>
+
+<body>
+    <nvd3 options="options" data="data"></nvd3>
+    <i class="fa fa-bandcamp" aria-hidden="true"></i>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/nvd3/build/nv.d3.js"></script>
+    <!-- or use another assembly -->
+    <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+    <script>
+        angular.module('myApp', ['nvd3'])
+            .controller('MainCtrl', function ($scope) {
+
+                $scope.options = {
+                    chart: {
+                        type: 'sunburstChart',
+                        height: 550,
+                        duration: 250,
+                        mode: 'size',
+                        showLabels: true,
+                        key: function (d) { return Math.random(); },
+                        labelFormat: function (d) {
+                            // return d.parent && d.depth > 1 ? d.parent.name + ' - ' + d.name : d.name;
+                            return d.name;
+                        },
+                        labelThreshold: 0.8,
+                        tooltip: {
+                            contentGenerator: function (d) {
+                                var key, data = d.data, sum = 0, porcentaje;
+
+                                if (data.depth !== 0) {
+                                    angular.forEach(data.parent.children, function (item) {
+                                        sum += item.value;
+                                    }, this);
+                                    porcentaje = Math.round(data.value / sum * 100) * 100 / 100;
+                                }
+
+                                switch (data.depth) {
+                                    case 0:
+                                        return '<p>Éstas son las reacciones a tu programa</p>';
+                                    case 1:
+                                        return '<p>Al <b>' + porcentaje + '%</b> le <b>' + data.name + '</b></p>';
+                                    case 2:
+                                        return '<p>El <b>' + porcentaje + '%</b> de los que les <b>' + data.parent.name + '</b> son <b>' + data.name + '</b></p>';
+                                    case 3:
+                                        return '<p>El <b>' + porcentaje + '%</b> de los <b>' + data.parent.name + '</b> que les <b>' + data.parent.parent.name + '</b> son <b>' + data.name + '</b></p>';
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                };
+
+                $scope.data = [{
+                    name: '',
+                    color: '#fff',
+                    children: [
+                        {
+                            name: 'GUSTA',
+                            color: '#009688',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'ENCANTA',
+                            color: '#e71f63',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'DIVIERTE',
+                            color: '#f8971c',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑÓS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑÓS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'ASOMBRA',
+                            color: '#fdd835',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑÓS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑÓS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'ENTRISTECE',
+                            color: '#8f3e97',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'ENOJA',
+                            color: '#ef4437',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'ABURRE',
+                            color: '#607d8b',
+                            children: [
+                                {
+                                    name: 'HOMBRES',
+                                    color: '#3f51b5',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#9fa8da', size: 1 },
+                                        { name: 'JÓVENES', color: '#7986cb', size: 2 },
+                                        { name: 'ADULTOS', color: '#5c6bc0', size: 5 }
+                                    ]
+                                },
+                                {
+                                    name: 'MUJERES',
+                                    color: '#e91e63',
+                                    children: [
+                                        { name: 'NIÑOS', color: '#f48fb1', size: 1 },
+                                        { name: 'JÓVENES', color: '#f06292', size: 2 },
+                                        { name: 'ADULTOS', color: '#ec407a', size: 5 }
+                                    ]
+                                }
+                            ]
+                        },
+                    ]
+                }];
+
+            });
+    </script>
+</body>
+
+</html>

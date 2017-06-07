@@ -1,0 +1,24 @@
+{
+  "name": "nvd3",
+  "authors": [
+    "David Rearte <dengue8830@gmail.com>"
+  ],
+  "description": "a nvd3 example",
+  "main": "",
+  "keywords": [
+    "nvd3"
+  ],
+  "license": "GPLv3",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-nvd3": "^1.0.9"
+  }
+}
